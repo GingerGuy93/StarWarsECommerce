@@ -24,8 +24,8 @@ class ReviewsModal extends Component{
             name: '',
             productDesc: '',
             price: 0,
-            productAve: 0,
-            category: ','
+            Ave: 2.5,
+            category: '',
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,9 +43,35 @@ class ReviewsModal extends Component{
     }
 
     handleSubmit = (event) => {
-      
+        this.filterReviews();
+        let ratings = this.state.filteredReview.map((rating) => 
+        (rating.rating));
+      this.setState({
+          filterRatings: ratings,
+      });
+      let sum = ratings.reduce((a,v) => a = a + v,0);
+      let average = sum / ratings.length;
+      const product = {
+        productId: this.props.product.productId,
+        name: this.props.product.name,
+        productDesc: this.props.product.description,
+        price: this.props.product.price,
+        Ave: this.props.product.averageRating,
+        category: this.props.product.category,
+      }
+      console.log(product);
+      this.updateProduct(this.props.product.productId, product);
+      this.setState({
+          productId: this.props.product.productId,
+          name: this.props.product.name,
+          productDesc: this.props.product.description,
+          price: this.props.product.price,
+          Ave: this.state.averageRating,
+          category: this.props.product.category,
+      })
+      console.log(average);
+
         console.log(this.state.productAverage)
-        console.log(this.props.product)
         event.preventDefault();
         let string = this.state.rating;
         let number = parseInt(string);
@@ -54,8 +80,6 @@ class ReviewsModal extends Component{
             rating: number,
             productId: this.props.productid,
         }
-        
-
         
         this.submitReview(review);
         this.setState({
@@ -129,33 +153,7 @@ class ReviewsModal extends Component{
     }
 
     ratingToList =() => {
-      let ratings = this.state.filteredReview.map((rating) => 
-        (rating.rating));
-      this.setState({
-          filterRatings: ratings,
-      });
-      let sum = ratings.reduce((a,v) => a = a + v,0);
-      let average = sum / ratings.length;
-      const product = {
-        productId: this.props.product.productId,
-        name: this.props.product.name,
-        productDesc: this.props.product.description,
-        price: this.props.product.price,
-        productAve: average,
-        category: this.props.product.category,
-      }
-      console.log(product);
-      this.updateProduct(this.props.product.productId, product);
-      this.setState({
-          productAverage: average,
-          productId: this.props.product.productId,
-          name: this.props.product.name,
-          productDesc: this.props.product.description,
-          price: this.props.product.price,
-          productAve: average,
-          category: this.props.product.category,
-      })
-      console.log(average);
+      
     }
 
     render(){
